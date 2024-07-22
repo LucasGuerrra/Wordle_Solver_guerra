@@ -1,10 +1,11 @@
 import os
 
-def Search_Word ():
-    file = open('letters\z.txt', 'r')
+def Search_Word (letter):
+    path = 'letters/' + letter + '.txt'
+    file = open(path, 'r')
 
     #CRANE and SAUCY starting words
-    exists = ['E','B','R','A']
+    exists = ['Z','E','B','R','A']
     no_exists = ['C','D','F','G','H','I','J','K','L','M','N','O','P','Q','S','T','U','V','W','X','Y']
     return_word = ''
 
@@ -43,4 +44,4 @@ def Search_Word ():
     return return_word
     
 # letter = input('What letter do you want to search?: ')
-print(Search_Word())
+print(Search_Word('z'))
