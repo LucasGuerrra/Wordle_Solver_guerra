@@ -1,17 +1,17 @@
 import os
 
-#The letters that are present and the ones that are not, respectively
-exists = ['R','E','B','A','Z']
-no_exists = ['C','D','F','G','H','I','J','K','L','M','N','O','P','Q','S','T','U','V','W','X','Y']
-#letter to search in the files
-letter = 'z'
+#The letters that are present,the ones that are not and the words that the user said it can't be, respectively
+exists = []
+no_exists = []
+removal = []
 
-def Search_Word (letter,exists, no_exists):
+def Search_Word (letter,exists, no_exists,removal):
     #working out how to find the desired file
     path = 'letters/' + letter + '.txt'
     file = open(path, 'r')
     
     return_word = ''
+    previous_pontuation = 0
 
     #this will go through each line(each word) in the file
     for line in file:
@@ -31,20 +31,36 @@ def Search_Word (letter,exists, no_exists):
             for not_letter in no_exists:
                 #checking if both letter match
                 if not_letter == character:
+                    print (not_letter,word)
                     #If they match, than activate a variable so that it can escape the for loops
                     fuck_off = True
                     break
             if fuck_off == True:
                 break
 
-            for yes_letter in digital_exists:
-                if yes_letter == character:
-                    pontuation += 1
-                    digital_exists.remove(yes_letter)
-            
-            if pontuation == 5:
+            for yes_letter in range(len(digital_exists)):
+                if digital_exists[yes_letter] == character:
+                    pontuation += 1 
+                    digital_exists[yes_letter] = ''
+                    break
+
+            if pontuation > previous_pontuation:
+                for big_no in removal:
+                    if word == big_no:
+                        fuck_off = True
+                        break
+                if fuck_off == True:
+                    break
+
+                print(pontuation, return_word, word)
                 return_word = word
-                end = True
+                previous_pontuation = pontuation
+
+                if pontuation == 5:
+                    end = True
+                    break
+
+                fuck_off = True
                 break
         
         #I like this part cause i fucked up a lot, cause i didnt realise that if the "fuck_off" was activated i can't just break the loop,
@@ -54,6 +70,7 @@ def Search_Word (letter,exists, no_exists):
         #the next word), or they only had matching letters with the 'exists' list (should break the entirety of the loops and awnser that) or
         #they didn't match all the letters but also didn't have anything to give conflict with the "no_exsits" list (should print a sorry message)
         if end == True:
+            print('end')
             break
         if fuck_off == True:
             continue
@@ -63,5 +80,38 @@ def Search_Word (letter,exists, no_exists):
         
     file.close()
     return return_word
+#-------------------------------------------------------------------------------------------------------------------------------------------------------------
+escape = False
+while True:
+    while True:
+        letter = input("Type a letter know(don't repeat them, and to end it type 'esc'): ")
+        if letter == 'esc':
+            break
+        else:
+            exists.append(letter)
+    print(exists)
+    while True:
+        letter = input("Type a letter know to be not(don't repeat them, and to end it type 'esc'): ")
+        if letter == 'esc':
+            break
+        else:
+            no_exists.append(letter)
+    print(no_exists)
 
-print(Search_Word(letter,exists, no_exists))
+    letter = input("Type a letter you want to search words for: ")
+
+
+
+    while True:
+        awnser = Search_Word(letter,exists, no_exists,removal)
+        print(awnser, ', this is the best match we could find for now')
+        check = input('Does this word work?(Y/N): ')
+        if check != 'N':
+            escape = True
+            break
+        else:
+            removal.append(awnser)
+            break
+
+    if escape == True:
+        break
