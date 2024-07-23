@@ -1,5 +1,3 @@
-import os
-
 #The letters that are present,the ones that are not and the words that the user said it can't be, respectively
 exists = []
 no_exists = []
@@ -23,17 +21,22 @@ def Search_Word (letter,exists, no_exists,removal):
         fuck_off = False
         digital_exists = exists.copy()
         pontuation = 0
-        end = False
 
-        #will go through each letter in the 'striped' word from the file  for both the checking if the letter doesn't exists or it does, respectively
+        for big_no in removal:
+            if word == big_no:
+                fuck_off = True
+                break
+        if fuck_off == True:
+            continue
+
         for character in word:
             #goes through each letter in the non existant letters' list
             for not_letter in no_exists:
                 #checking if both letter match
                 if not_letter == character:
-                    print (not_letter,word)
                     #If they match, than activate a variable so that it can escape the for loops
                     fuck_off = True
+                    pontuation = 0
                     break
             if fuck_off == True:
                 break
@@ -44,36 +47,13 @@ def Search_Word (letter,exists, no_exists,removal):
                     digital_exists[yes_letter] = ''
                     break
 
-            if pontuation > previous_pontuation:
-                for big_no in removal:
-                    if word == big_no:
-                        fuck_off = True
-                        break
-                if fuck_off == True:
-                    break
+        if pontuation > previous_pontuation:
+            print(pontuation, return_word, word)
+            return_word = word
+            previous_pontuation = pontuation
 
-                print(pontuation, return_word, word)
-                return_word = word
-                previous_pontuation = pontuation
-
-                if pontuation == 5:
-                    end = True
-                    break
-
-                fuck_off = True
+            if pontuation == 5:
                 break
-        
-        #I like this part cause i fucked up a lot, cause i didnt realise that if the "fuck_off" was activated i can't just break the loop,
-        #i insisted a lot in this mistake until i realized that i should have used the continue so that the code just jumps to the next word
-
-        #basicaly if it escaped the for loop above, either they came from the a word that had a letter that didn't exists (should only go to 
-        #the next word), or they only had matching letters with the 'exists' list (should break the entirety of the loops and awnser that) or
-        #they didn't match all the letters but also didn't have anything to give conflict with the "no_exsits" list (should print a sorry message)
-        if end == True:
-            print('end')
-            break
-        if fuck_off == True:
-            continue
     
     if return_word == '':
         return_word = "Could'n find a possible match"
@@ -84,15 +64,15 @@ def Search_Word (letter,exists, no_exists,removal):
 escape = False
 while True:
     while True:
-        letter = input("Type a letter know(don't repeat them, and to end it type 'esc'): ")
-        if letter == 'esc':
+        letter = input("Type a letter know(end it type 'Ç'): ")
+        if letter == 'Ç':
             break
         else:
             exists.append(letter)
     print(exists)
     while True:
-        letter = input("Type a letter know to be not(don't repeat them, and to end it type 'esc'): ")
-        if letter == 'esc':
+        letter = input("Type a letter know to be not(don't repeat them, and to end it type 'Ç'): ")
+        if letter == 'Ç':
             break
         else:
             no_exists.append(letter)
