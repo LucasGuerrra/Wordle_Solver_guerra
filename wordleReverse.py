@@ -62,29 +62,33 @@ def Search_Word (letter,exists, no_exists,removal):
     return return_word
 #-------------------------------------------------------------------------------------------------------------------------------------------------------------
 escape = False
+print("ATENTION! If you ever want to erase something from one of the lists after it has already been sent, type 'Ç' when it asks you which letter to search for")
 while True:
-    while True:
-        letter = input("Type a letter know(end it type 'Ç'): ")
-        if letter == 'Ç':
-            break
-        else:
-            exists.append(letter)
+    letters = input("Type all the letters know: ")
+    exists += list(letters)
     print(exists)
-    while True:
-        letter = input("Type a letter know to be not(don't repeat them, and to end it type 'Ç'): ")
-        if letter == 'Ç':
-            break
-        else:
-            no_exists.append(letter)
+
+    letters = input("Type all the letters know not to be: ")
+    no_exists += list(letters)
     print(no_exists)
 
     letter = input("Type a letter you want to search words for: ")
-
-
+    while letter == 'Ç':
+        print('Known letters: ', exists)
+        removing = input('Type all the letters that should be removed from the known letters list: ')
+        for letter in list(removing):
+            exists.remove(letter)
+        print('Known letters: ', exists)
+        print('Known to not be letters: ', no_exists)
+        removing = input('Type all the letters that should be removed from the known to not be letters list: ')
+        for letter in list(removing):
+            no_exists.remove(letter)
+        print('Known to not be letters: ', no_exists)
+        letter = input("Type a letter you want to search words for: ")
 
     while True:
         awnser = Search_Word(letter,exists, no_exists,removal)
-        print(awnser, ', this is the best match we could find for now')
+        print(awnser, ', is the best match we could find for now')
         check = input('Does this word work?(Y/N): ')
         if check != 'N':
             escape = True
