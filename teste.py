@@ -1,1 +1,2 @@
-l = ['d','g','k','l','f']
+for i in range(5):
+    print(i)

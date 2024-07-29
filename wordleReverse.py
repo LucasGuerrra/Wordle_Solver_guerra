@@ -1,3 +1,8 @@
+import os
+import time
+
+clear = lambda: os.system('cls')
+
 #The letters that are present,the ones that are not and the words that the user said it can't be, respectively
 exists = []
 no_exists = []
@@ -14,12 +19,11 @@ def Search_Word (letter,exists, no_exists,removal):
     #this will go through each line(each word) in the file
     for line in file:
         #these will remove spaces and \n from the strings, be a variable in case the letter in the word is in the "no_exists" list,
-        #be a list that can be reseted for each word so that we dont lose the "exists" file's information(i just discovered that if u use 
+        #be a list that can be reseted for each word so that we dont lose the "exists" file's information(i just discovered that if u use
         #'variable' = 'list', that links both lists, and instead i need to use the '.copy' so they dont link. LOL), a way of tracking which words
         #are have the most letters matching with the "exists" list and a variable that will end the search if it founds a perfect match, all respectively
         word = line.strip()
         fuck_off = False
-        digital_exists = exists.copy()
         pontuation = 0
 
         for big_no in removal:
@@ -40,12 +44,20 @@ def Search_Word (letter,exists, no_exists,removal):
                     break
             if fuck_off == True:
                 break
+        if fuck_off == True:
+            break
 
-            for yes_letter in range(len(digital_exists)):
-                if digital_exists[yes_letter] == character:
-                    pontuation += 1 
-                    digital_exists[yes_letter] = ''
-                    break
+            # for yes_letter in range(len(digital_exists)):
+            #     if digital_exists[yes_letter] == character:
+            #         pontuation += 1
+            #         digital_exists[yes_letter] = ''
+            #         break
+        for i in range(5):
+            if exists[i] == '':
+                continue
+            if list(word)[i] == exists[i]:
+                print(exists[i])
+                pontuation += 1
 
         if pontuation > previous_pontuation:
             print(pontuation, return_word, word)
@@ -62,29 +74,39 @@ def Search_Word (letter,exists, no_exists,removal):
     return return_word
 #-------------------------------------------------------------------------------------------------------------------------------------------------------------
 escape = False
-print("ATENTION! If you ever want to erase something from one of the lists after it has already been sent, type 'Ç' when it asks you which letter to search for")
+
 while True:
-    letters = input("Type all the letters know: ")
-    exists += list(letters)
+    clear()
+    letters = input("Type the next letter that exists(if it's unknown type '-'): ")
+    for i in range(4):
+        exists.append(letters)
+        clear()
+        print(exists)
+        letters = input("Type the next letter that exists(if it's unknown type '-'): ")
+    clear()
+    exists.append(letters)
     print(exists)
 
-    letters = input("Type all the letters know not to be: ")
+    time.sleep(3)
+    clear()
+
+    letters = input("Type all the letters know not to be (don't put spaces between them): ")
     no_exists += list(letters)
     print(no_exists)
 
-    letter = input("Type a letter you want to search words for: ")
-    while letter == 'Ç':
-        print('Known letters: ', exists)
-        removing = input('Type all the letters that should be removed from the known letters list: ')
-        for letter in list(removing):
-            exists.remove(letter)
-        print('Known letters: ', exists)
-        print('Known to not be letters: ', no_exists)
-        removing = input('Type all the letters that should be removed from the known to not be letters list: ')
-        for letter in list(removing):
-            no_exists.remove(letter)
-        print('Known to not be letters: ', no_exists)
+    time.sleep(3)
+    clear()
+
+    print(exists)
+    print(no_exists)
+    if exists[0] == '':
         letter = input("Type a letter you want to search words for: ")
+    else:
+        letter = exists[0]
+        print("Searching for the letter '",letter,"'")
+
+    time.sleep(2.5)
+    clear()
 
     while True:
         awnser = Search_Word(letter,exists, no_exists,removal)
