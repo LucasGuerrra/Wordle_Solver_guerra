@@ -33,26 +33,18 @@ def Search_Word (letter,exists, no_exists,removal):
         if fuck_off == True:
             continue
 
-        for character in word:
+        for i in range(5):
             #goes through each letter in the non existant letters' list
             for not_letter in no_exists:
                 #checking if both letter match
-                if not_letter == character:
+                if not_letter == word[i]:
                     #If they match, than activate a variable so that it can escape the for loops
                     fuck_off = True
                     pontuation = 0
                     break
             if fuck_off == True:
                 break
-        if fuck_off == True:
-            break
 
-            # for yes_letter in range(len(digital_exists)):
-            #     if digital_exists[yes_letter] == character:
-            #         pontuation += 1
-            #         digital_exists[yes_letter] = ''
-            #         break
-        for i in range(5):
             if exists[i] == '':
                 continue
             if list(word)[i] == exists[i]:
