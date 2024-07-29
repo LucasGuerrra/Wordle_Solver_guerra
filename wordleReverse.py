@@ -5,6 +5,7 @@ clear = lambda: os.system('cls')
 
 #The letters that are present,the ones that are not and the words that the user said it can't be, respectively
 positioned = []
+exists = []
 no_exists = []
 removal = []
 
@@ -15,6 +16,7 @@ def Search_Word (letter, no_exists,removal):
     
     return_word = ''
     previous_pontuation_primal = 0
+    previous_pontuation_side = 0
 
     #this will go through each line(each word) in the file
     for line in file:
@@ -23,8 +25,10 @@ def Search_Word (letter, no_exists,removal):
         #'variable' = 'list', that links both lists, and instead i need to use the '.copy' so they dont link. LOL), a way of tracking which words
         #are have the most letters matching with the "exists" list and a variable that will end the search if it founds a perfect match, all respectively
         word = line.strip()
+        digital_exists = exists.copy()
         fuck_off = False
         pontuation_primal = 0
+        pontuation_side = 0
 
         for big_no in removal:
             if word == big_no:
@@ -38,13 +42,19 @@ def Search_Word (letter, no_exists,removal):
             for not_letter in no_exists:
                 #checking if both letter match
                 if not_letter == word[i]:
-                    clear()
                     #If they match, than activate a variable so that it can escape the for loops
                     fuck_off = True
                     pontuation_primal = 0
+                    pontuation_side = 0
                     break
             if fuck_off == True:
                 break
+
+            for yes_letter in range(len(digital_exists)):
+                if digital_exists[yes_letter] == word[i]:
+                    pontuation_side += 1 
+                    digital_exists[yes_letter] = ''
+
 
             if positioned[i] == '-':
                 continue
@@ -52,14 +62,21 @@ def Search_Word (letter, no_exists,removal):
                 pontuation_primal += 1
             else:
                 pontuation_primal = 0
+                pontuation_side = 0
                 break
 
         if pontuation_primal > previous_pontuation_primal:
             return_word = word
             previous_pontuation_primal = pontuation_primal
+            previous_pontuation_side = pontuation_side
 
             if pontuation_primal == 5:
                 break
+        elif pontuation_primal == previous_pontuation_primal:
+            if pontuation_side > previous_pontuation_side:
+                return_word = word
+                previous_pontuation_primal = pontuation_primal
+                previous_pontuation_side = pontuation_side
     
     if return_word == '':
         return_word = "Could'n find a possible match"
@@ -68,7 +85,6 @@ def Search_Word (letter, no_exists,removal):
     return return_word
 #-------------------------------------------------------------------------------------------------------------------------------------------------------------
 escape = False
-rounds = 0
 
 while True:
     positioned = []
@@ -86,7 +102,15 @@ while True:
     time.sleep(3)
     clear()
 
-    letters = input("Type all the letters know not to be (don't put spaces between them): ")
+    letters = input("Type all the letters know to exist(don't put spaces between them): ")
+    exists = list(letters)
+    print(exists)
+
+    time.sleep(3)
+    clear()
+
+    print(no_exists)
+    letters = input("Type all the letters know not to be(don't put spaces between them): ")
     no_exists += list(letters)
     print(no_exists)
 
@@ -115,8 +139,4 @@ while True:
             break
 
     if escape == True:
-        #CAUSE I ALWAYS START WITH "CRANE" AND "SAUCY", SO I NEED TO ADD THE +2
-        print('Final pontuation is ',rounds+2)
         break
-    
-    rounds += 1
