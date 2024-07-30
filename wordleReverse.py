@@ -3,12 +3,6 @@ import time
 
 clear = lambda: os.system('cls')
 
-#The letters that are present,the ones that are not and the words that the user said it can't be, respectively
-positioned = []
-exists = []
-no_exists = []
-removal = []
-
 def Search_Word (letter, no_exists,removal):
     #working out how to find the desired file
     path = 'letters/' + letter + '.txt'
@@ -38,6 +32,7 @@ def Search_Word (letter, no_exists,removal):
             continue
 
         for i in range(5):
+            
             #goes through each letter in the non existant letters' list
             for not_letter in no_exists:
                 #checking if both letter match
@@ -54,13 +49,18 @@ def Search_Word (letter, no_exists,removal):
                 if digital_exists[yes_letter] == word[i]:
                     pontuation_side += 1 
                     digital_exists[yes_letter] = ''
+                    break
 
-
-            if positioned[i] == '-':
+            if positioned[i] == '':
                 continue
             if list(word)[i] == positioned[i]:
                 pontuation_primal += 1
             else:
+                pontuation_primal = 0
+                pontuation_side = 0
+                break
+        for letter in digital_exists:
+            if letter != '':
                 pontuation_primal = 0
                 pontuation_side = 0
                 break
@@ -84,59 +84,66 @@ def Search_Word (letter, no_exists,removal):
     file.close()
     return return_word
 #-------------------------------------------------------------------------------------------------------------------------------------------------------------
-escape = False
-
 while True:
+    escape = False
+
+    #The letters that are present,the ones that are not and the words that the user said it can't be, respectively
     positioned = []
-    clear()
-    letters = input("Type the next letter that is positioned(if it's unknown type '-'): ")
-    for i in range(4):
-        positioned.append(letters)
-        clear()
-        print(positioned)
-        letters = input("Type the next letter that positioned(if it's unknown type '-'): ")
-    clear()
-    positioned.append(letters)
-    print(positioned)
-
-    time.sleep(3)
-    clear()
-
-    letters = input("Type all the letters know to exist(don't put spaces between them): ")
-    exists = list(letters)
-    print(exists)
-
-    time.sleep(3)
-    clear()
-
-    print(no_exists)
-    letters = input("Type all the letters know not to be(don't put spaces between them): ")
-    no_exists += list(letters)
-    print(no_exists)
-
-    time.sleep(3)
-    clear()
-
-    print(no_exists)
-    if positioned[0] == '-':
-        letter = input("Type a letter you want to search words for: ")
-    else:
-        letter = positioned[0]
-        print("Searching for the letter '",letter,"'")
-
-    time.sleep(2.5)
-    clear()
+    exists = []
+    no_exists = []
+    removal = []
 
     while True:
-        awnser = Search_Word(letter, no_exists,removal)
-        print(awnser, ', is the best match we could find for now')
-        check = input('Does this word work?(Y/N): ')
-        if check != 'N':
-            escape = True
-            break
-        else:
-            removal.append(awnser)
-            break
+        positioned = []
+        clear()
+        letters = input("Type the next letter that is positioned(if it's unknown just press ENTER): ")
+        for i in range(4):
+            positioned.append(letters)
+            clear()
+            print(positioned)
+            letters = input("Type the next letter that positioned(if it's unknown just press ENTER): ")
+        clear()
+        positioned.append(letters)
+        print(positioned)
 
-    if escape == True:
-        break
+        time.sleep(2)
+        clear()
+
+        letters = input("Type all the letters know to exist(don't put spaces between them): ")
+        exists = list(letters)
+        print(exists)
+
+        time.sleep(2)
+        clear()
+
+        print(no_exists)
+        letters = input("Type all the letters know not to be(don't put spaces between them): ")
+        no_exists += list(letters)
+        print(no_exists)
+
+        time.sleep(2)
+        clear()
+
+        print(no_exists)
+        if positioned[0] == '':
+            letter = input("Type a letter you want to search words for: ")
+        else:
+            letter = positioned[0]
+            print("Searching for the letter '",letter,"'")
+
+        time.sleep(1.5)
+        clear()
+
+        while True:
+            awnser = Search_Word(letter, no_exists,removal)
+            print(awnser, ', is the best match we could find for now')
+            check = input('Does this word work?(Y/N): ')
+            if check != 'N':
+                escape = True
+                break
+            else:
+                removal.append(awnser)
+                break
+
+        if escape == True:
+            break
