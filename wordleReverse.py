@@ -32,7 +32,6 @@ def Search_Word (letter, no_exists,removal):
             continue
 
         for i in range(5):
-            
             #goes through each letter in the non existant letters' list
             for not_letter in no_exists:
                 #checking if both letter match
